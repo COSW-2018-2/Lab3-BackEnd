@@ -15,6 +15,7 @@ public class TodoServiceImpl implements TodoService {
         return list;
     }
 
+    // Seguire la firma dada en el enunciado del lab: donde retornan en el addTodo
     @Override
     public Todo addTodo(Todo todo) {
         list.add(todo);
