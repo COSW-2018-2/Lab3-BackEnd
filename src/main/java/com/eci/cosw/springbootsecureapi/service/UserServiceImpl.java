@@ -3,10 +3,12 @@ package com.eci.cosw.springbootsecureapi.service;
 import com.eci.cosw.springbootsecureapi.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import javax.servlet.ServletException;
 
 import javax.annotation.PostConstruct;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author Santiago Carrillo
@@ -28,7 +30,7 @@ public class UserServiceImpl
     @PostConstruct
     private void populateSampleData()
     {
-        users.add( new User( "test@mail.com", "password", "Andres", "Perez" ) );
+        users.add( new User( "xyz", "Andres", "test@mail.com", "Perez", "http://assets.winsports.co/sites/default/files/8942_0.jpg", "password"));
     }
 
 
@@ -39,21 +41,33 @@ public class UserServiceImpl
     }
 
     @Override
-    public User getUser( Long id )
+    public User getUser( String username ) throws ServletException
     {
-        return users.get( 0 );
+        Optional<User> found = users.stream().filter(h-> h.getUsername().equals(username)).findAny();
+        if (!found.isPresent()){
+            throw new ServletException ("Username not found.");
+        }
+        return found.get();
     }
 
     @Override
-    public User createUser( User user )
+    public User createUser( User user ) throws ServletException
     {
-        return users.get( 0 );
+        if (users.stream().anyMatch(h->h.getUsername().equals(user.getUsername()))){
+            throw new ServletException ("Username already exist");
+        }
+        users.add(user);
+        return user;
     }
 
     @Override
-    public User findUserByEmail( String email )
+    public User findUserByEmail( String email ) throws ServletException
     {
-        return users.get( 0 );
+        Optional<User> found = users.stream().filter(h-> h.getEmail().equals(email)).findAny();
+        if (!found.isPresent()){
+            throw new ServletException ("No user found with the email address");
+        }
+        return found.get();
     }
 
     @Override

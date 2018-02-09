@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author Santiago Carrillo
@@ -21,6 +22,30 @@ public class UserController
 
     @Autowired
     private UserService userService;
+
+    @CrossOrigin
+    @RequestMapping( value = "/items", method = RequestMethod.GET )
+    public List<User> getUsers(){
+        return userService.getUsers();
+    }
+
+    @CrossOrigin
+    @RequestMapping( value = "/item", method = RequestMethod.POST ) 
+    public User registerUser( @RequestBody User user ) throws ServletException {
+        if ( user.getUsername() == null || user.getPassword() == null || user.getImage()==null || 
+            user.getEmail()==null || user.getFirstname() == null || user.getLastname() == null)
+        {
+            throw new ServletException( "Please fill all blanks" );
+        }
+        userService.createUser(user);
+        return user;
+    }
+
+    @CrossOrigin
+    @RequestMapping( value = "/filter/{email}", method = RequestMethod.GET ) 
+    public User findUserByEmail(@PathVariable  String email) throws ServletException{
+        return userService.findUserByEmail(email);
+    }
 
     @CrossOrigin
     @RequestMapping( value = "/login", method = RequestMethod.POST )
@@ -38,12 +63,13 @@ public class UserController
         String username = login.getUsername();
         String password = login.getPassword();
 
-        User user = userService.getUser( 0l );
+        User user = userService.getUser(username);
 
+        /* Manejo excepción en service
         if ( user == null )
         {
             throw new ServletException( "User username not found." );
-        }
+        }*/
 
         String pwd = user.getPassword();
 

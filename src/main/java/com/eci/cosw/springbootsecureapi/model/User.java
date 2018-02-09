@@ -19,19 +19,30 @@ public class User
 
     private String username;
 
+    private String image;
 
     public User()
     {
     }
 
-    public User( String email, String password, String firstname, String lastname )
+    public User( String username, String firstname, String email, String lastname, String image, String password )
     {
-        this.email = email;
-        this.password = password;
+        this.username = username;
         this.firstname = firstname;
+        this.email = email;
         this.lastname = lastname;
+        this.image = image;
+        this.password = password;
+   
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     public long getId()
     {
@@ -94,9 +105,8 @@ public class User
     }
 
     @Override
-    public String toString()
-    {
-        return "User{" + "id=" + id + ", email='" + email + '\'' + ", password='" + password + '\'' + ", firstname='"
-            + firstname + '\'' + '}';
+    public String toString() {
+        return "User{" + "id=" + id + ", email=" + email + ", password=" + password + ", firstname=" + firstname + ", lastname=" + lastname + ", username=" + username + ", image=" + image + '}';
     }
+
 }
